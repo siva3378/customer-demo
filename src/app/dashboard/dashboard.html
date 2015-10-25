@@ -1,0 +1,69 @@
+<div class="col-md-3">
+        <div class="alert alert-info text-center">
+            <span class="fa-3x">
+			<i class="fa fa-users"></i> {{totalCustomers |number:0}}
+		</span>
+            <br> Total Customers
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="alert alert-info text-center">
+            <span class="fa-3x">
+			<i class="fa fa-map-marker"></i> {{stateWiseOrders.data.length |number:0}}
+		</span>
+            <br> Total States
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="alert alert-success text-center">
+            <span class="fa-3x">
+			<i class="fa fa-rupee"></i> {{totalOrders |number}}
+		</span>
+            <br> Total Orders
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="alert alert-warning text-center">
+            <span class="fa-3x">
+			<i class="fa fa-tree"></i> {{totalGroceryItems |number}}
+		</span>
+            <br> Total Grocery Products
+        </div>
+    </div>
+
+
+
+
+<div class="row">
+    <section class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                State wise Orders
+            </div>
+            <div class="panel-body">
+                <nvd3 options="stateWiseOrders.options" data="stateWiseOrders.data"></nvd3>
+            </div>
+        </div>
+    </section>
+    <section class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                State wise Customers
+            </div>
+            <div class="panel-body">
+                <nvd3 options="stateWiseCustomers.options" data="stateWiseCustomers.data"></nvd3>
+            </div>
+        </div>
+    </section>
+    
+ <section class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Products orders
+            </div>
+            <div class="panel-body">
+                <nvd3 options="productWise.options" data="productWise.data"></nvd3>
+            </div>
+        </div>
+    </section>
+</div>

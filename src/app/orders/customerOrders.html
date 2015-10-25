@@ -1,0 +1,36 @@
+﻿<header class='row customer-orders view'>
+    <legend class="col-md-12 text-info">
+     <i class="fa fa-fw fa-user fa-2x"></i>
+     Customer orders
+     <!-- <form class="form-inline pull-right">
+            <div class="form-group">
+                <input type="text" class="form-control" data-ng-model="newCustomer.firstName" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" data-ng-model="newCustomer.lastName" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" data-ng-model="newCustomer.stateName" placeholder="Customer City">
+            </div>
+             <div class="form-group">
+                 <button id="submitCustomer" class="btn btn-primary" type="button" data-ng-disabled="!newCustomer.firstName || !newCustomer.lastName || !newCustomer.stateName" data-ng-click="insertCustomer()">Add Customer</button>
+            </div>
+        </form> -->
+    </legend>
+</header>
+<br />
+<p class="well row">
+        <span class="col-md-6 fa-2x">
+            {{customer.firstName + ' ' + customer.lastName | titlecase}}<br>{{customer.stateName | titlecase}}
+        </span>
+        <span class="col-md-6 text-right fa-3x">
+            <i class="fa fa-fw fa-rupee"></i> {{customer.totalOrders}}
+        </span>
+    </p>
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div data-ng-include="'src/app/orders/ordersTable.html'"/>
+        </div>
+    </div>
+</div>

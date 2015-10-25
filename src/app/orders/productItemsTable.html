@@ -1,0 +1,19 @@
+<table class="table table-striped table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th class="text-right">Quantity</th>
+            <th class="text-right">Unit Price</th>
+            <th class="text-right">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="anItem in order.itemList">
+            <td>{{anItem.name}}</td>
+            <td class="text-right">{{anItem.quantity}}</td>
+            <td class="text-right">{{anItem.rate | number:2}}</td>
+            <td class="text-right">
+                <i class="fa fa-fw fa-rupee"></i> {{anItem.quantity*anItem.rate | number:2}}</td>
+        </tr>
+    </tbody>
+</table>

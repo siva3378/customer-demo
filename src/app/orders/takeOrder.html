@@ -1,0 +1,58 @@
+<header class='row customers view'>
+    <legend class="col-md-12 text-info">
+        <i class='fa fa-fw fa-users fa-2x'></i> Take Order for {{customer.firstName + ' ' + customer.lastName | titlecase}}
+    </legend>
+</header>
+<br />
+<div class="row">
+    <div class="col-md-6">
+        <form>
+            <div class="form-group">
+                <label>Item Name</label>
+                <input type="text" class="form-control" data-ng-model="newItem.name" 
+                placeholder="Item Name"
+                typeahead="itemName for itemName in itemList | filter:$viewValue | limitTo:20"
+                >
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" class="form-control" data-ng-model="newItem.quantity" placeholder="Quantity">
+            </div>
+            <div class="form-group">
+                <label>Unit price</label>
+                <input type="number" class="form-control" data-ng-model="newItem.rate" placeholder="Unit price">
+            </div>
+            <div class="form-group">
+                <span class="fa-2x pull-left">
+                <i class="fa fa-fw fa-rupee"></i>
+                 {{newItem.quantity * newItem.rate | number:2}}
+             </span>
+            </div>
+            <div class="form-group text-right">
+                <button class="btn btn-danger" type="button" data-ng-click="newItem=resetItem()">Clear</button>
+
+                <button class="btn btn-primary" type="button" data-ng-disabled="!newItem.name || !newItem.quantity || !newItem.rate" data-ng-click="addItem(newItem)">Add Item</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <label class="pull-right">Placing this order on {{order.d|date}}</label><br>
+        <div data-ng-include="'src/app/orders/productItemsTable.html'" />
+        <div class="form-group">
+                <span class="fa-2x pull-left">
+                <i class="fa fa-fw fa-rupee"></i>
+                 {{newItem.quantity * newItem.rate | number:2}}
+             </span>
+        <div class="form-group text-right">
+                <button class="btn btn-danger" type="button" data-ng-click="order=resetOrder()">Clear</button>
+
+                <button class="btn btn-primary" type="button" data-ng-disabled="order.itemList.length<1" data-ng-click="addOrder()">Place Order</button>
+            </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

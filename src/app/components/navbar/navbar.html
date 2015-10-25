@@ -1,0 +1,20 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <a class="navbar-brand" href="#/">
+            {{vm.appName}}</a>
+        <ul class="nav navbar-nav">
+            <li ng-repeat="item in vm.menu" ng-class="{'active':vm.getClass(item.link)}">
+                <a ng-href="{{item.link}}">
+                     {{item.name}}
+                </a>
+            </li>
+        </ul>
+        <form class="nav navbar-nav pull-right navbar-form" role="search">
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term"
+                ng-model="$root.searchText">
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+            </div>
+        </form>
+    </div>
+</nav>

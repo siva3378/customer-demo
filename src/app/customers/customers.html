@@ -1,0 +1,49 @@
+﻿<header class='row customers view'>
+    <legend class="col-md-12 text-info">
+     <i class='fa fa-fw fa-users fa-2x'></i>
+     Customers 
+     <form class="form-inline pull-right">
+            <div class="form-group">
+                <input type="text" class="form-control" data-ng-model="newCustomer.firstName" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" data-ng-model="newCustomer.lastName" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" data-ng-model="newCustomer.stateName" placeholder="Customer City">
+            </div>
+             <div class="form-group">
+                 <button id="submitCustomer" class="btn btn-primary" type="button" data-ng-disabled="!newCustomer.firstName || !newCustomer.lastName || !newCustomer.stateName" data-ng-click="insertCustomer()">Add Customer</button>
+            </div>
+        </form>
+    </legend>
+</header>
+<br />
+<br />
+<div>
+    <div class="row">
+        <div class="col-md-3" data-ng-repeat="customer in customers | orderBy:'firstName' | filter:searchText">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{customer.firstName + ' ' + customer.lastName | titlecase}}
+                    <!-- <button class="btn close" data-ng-click="deleteCustomer(customer.id)">&times;</button> -->
+                </div>
+                <div class="panel-body">
+                    <span class="fa-2x">
+                    <i class="fa fa-fw fa-rupee"></i>
+                        {{getTotalAmount(customer)| number:2}}
+                    </span>
+                    <br>
+                    <a href="#/takeorder/{{customer.id}}" class="cardBody btn-link">
+                    Take an Order</a> | 
+                    <a href="#/customerorders/{{customer.id}}" class="cardBody btn-link">
+                    View {{ customer.orders.length }} Orders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br /><br />
+<br /><br />
+<br />

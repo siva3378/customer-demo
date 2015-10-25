@@ -1,0 +1,38 @@
+<header class='row customers view'>
+    <legend class="col-md-12 text-info">
+        <span class="col-md-6">
+             <i class='fa fa-fw fa-tree fa-2x'></i>
+     Products 
+        </span>
+        <form class="form-inline  col-md-6 text-right">
+        <div class="form-group">
+                <input type="text" ng-model='categoryName' class='form-control' placeholder="Category Name">
+            </div>
+            <div class="form-group">
+                <input type="text" ng-model='itemName' class='form-control' placeholder="Product Name">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="button" data-ng-disabled="!categoryName || !itemName" ng-click="addItem(categoryName,itemName)">Add Product</button>
+            </div>
+        </form>
+    </legend>
+</header>
+<br />
+<br>
+<div class="row">
+    <div class="col-md-3" ng-repeat="aCategory in categories | filter:searchText" ng-show="filteredItems.length>0">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{aCategory.category | titlecase}}
+                <small class="badge pull-right">{{filteredItems.length}}</small>
+            </div>
+            <div class="panel-body">
+                <ul class="nav nav-pills nav-stacked">
+                    <li ng-repeat="item in filteredItems = (aCategory.items | filter:searchText)">
+                        {{item | titlecase}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
