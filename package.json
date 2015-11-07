@@ -1,10 +1,12 @@
 {
-  "name": "sample-jasmine-karma",
+  "name": "customer-demo",
   "version": "1.0.0",
   "description": "It is a sample app to demo about jasmine & karma",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "npm update  && npm install -g bower gulp jasmine-core karma karma-cli karma-jasmine phantomjs karma-chrome-launcher  karma-phantomjs-launcher karma-firefox-launcher karma-ie-launcher karma-coverage karma-html-reporter --save-dev",
+    "postinstall": "gulp sass && gulp html2js && gulp inject && npm test",
+    "test": "karma start karma.config.js --single-run --browsers PhantomJS"
   },
   "author": "Siva Kumar",
   "license": "ISC",
@@ -27,7 +29,20 @@
     "gulp-uglify": "^1.4.1",
     "gulp-util": "^3.0.2",
     "istanbul": "^0.3.22",
-    "karma": "^0.13.10",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-coverage": "^0.2.7",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-fixture": "^0.2.5",
+    "karma-html-reporter": "^0.2.6",
+    "karma-hy-html-reporter": "0.0.14",
+    "karma-ie-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.5",
+    "karma-jasmine-html-reporter": "^0.1.6",
+    "karma-json-fixtures-preprocessor": "0.0.4",
+    "karma-ng-html2js-preprocessor": "^0.1.2",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-spec-reporter": "0.0.16",
     "lingon-ng-html2js": "^0.1.6",
     "wiredep": "^3.0.0-beta",
     "yargs": "^3.27.0"

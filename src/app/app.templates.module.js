@@ -418,34 +418,6 @@ try {
   module = angular.module('app.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('src/app/components/footer/footer.html',
-    '<div class="navbar navbar-fixed-bottom navbar-inverse">\n' +
-    '    <div class="navbar-inner">\n' +
-    '        <div class="container">\n' +
-    '            <footer>\n' +
-    '                <div class="row">\n' +
-    '                    <div class="col-md-6 navbar-text">\n' +
-    '                        Created by Siva Kumar\n' +
-    '                    </div>\n' +
-    '                    <div class="col-md-6 navbar-text text-right">\n' +
-    '                        @ skumar244@gmail.com\n' +
-    '                    </div>\n' +
-    '                </div>\n' +
-    '            </footer>\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '</div>\n' +
-    '');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('app.templates');
-} catch (e) {
-  module = angular.module('app.templates', []);
-}
-module.run(['$templateCache', function($templateCache) {
   $templateCache.put('src/app/components/navbar/navbar.html',
     '<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">\n' +
     '    <div class="container">\n' +
@@ -467,6 +439,31 @@ module.run(['$templateCache', function($templateCache) {
     '        </form>\n' +
     '    </div>\n' +
     '</nav>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('app.templates');
+} catch (e) {
+  module = angular.module('app.templates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('src/app/components/footer/footer.html',
+    '<div class="navbar navbar-fixed-bottom navbar-inverse">\n' +
+    '    <div class="navbar-inner">\n' +
+    '        <div class="container">\n' +
+    '            <footer>\n' +
+    '                <div class="row">\n' +
+    '                    <div class="col-md-12 navbar-text">\n' +
+    '                        Created by Siva Kumar @ skumar244@sapient.com\n' +
+    '                    </div>\n' +
+    '                </div>\n' +
+    '            </footer>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '</div>\n' +
     '');
 }]);
 })();
