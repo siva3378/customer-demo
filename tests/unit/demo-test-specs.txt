@@ -1,0 +1,89 @@
+        - Show SpecRunner.html file
+        - Show the empty app.js & app.spec.js files to start
+        - To demonstrate TTD approach, 
+
+        - Add initial specs
+        ------------------------------------------------------------------------
+        describe("The APP's - ", function() {
+            describe('parse boolean function', function() {
+                var fun;
+                beforeEach(function() {
+                    // here you can inject any functions or initialize some data
+                    fun = parseBool;
+                });
+                
+                it("should parse 'true' string to boolean value", function() {
+                    var bool = {val: "true"};
+                    expect(fun(bool)).toBe(true);
+                });
+            });
+
+            describe('sqrt function', function() {
+                it("should compute the square root of 4 as 2", function() {
+                    expect(sqrt(4)).toEqual(2);
+                });
+            });
+        })
+
+        - Show SpecRunner.html file with tests fails
+
+        - add these functions to see tests are passed
+        ------------------------------------------------------------------------
+        function parseBool(flag) {
+            return (flag.val === "true") ? true : false;
+        }
+
+        function sqrt(x) {
+            if (x < 0) {
+                return "sqrt can't work on negative number"
+            } else {
+                return Math.exp(Math.log(x) / 2);
+            }
+        }
+
+
+        - update test according to req, and check unit test report
+        - We can see few tests are failing, so we need to refractor our code
+        ------------------------------------------------------------------------
+        it("should parse 'TRUE' string to boolean value", function() {
+            var bool = {val: "TRUE"};
+            expect(fun(bool)).toBe(true);
+        });
+
+         it("should parse null to boolean value - false", function() {
+             var bool = null;
+             expect(fun(bool)).toBe(false);
+         });
+         it("should parse undefined to boolean value - false", function() {
+             var bool = undefined;
+             expect(fun(bool)).toBe(false);
+         });
+         it("should parse empty string to boolean value - false", function() {
+             var bool = "";
+             expect(fun(bool)).toBe(false);
+         });
+
+         do code refactor - to make all tests are passed
+        ------------------------------------------------------------------------
+        function parseBool(flag) {
+            if (flag) {
+                return (flag.val === "true" || flag.val === "TRUE") ? true : false;
+            } else {
+                return false;
+            }
+        }
+
+        - Environment setup of karma
+
+        - for coverage report
+        - add extra tests to cover fully
+        ------------------------------------------------------------------------
+         it("should parse 'false' string to boolean value", function() {
+             expect(fun({val:"false"})).toBe(false);
+         });
+
+        it("should throw an exception if given a negative number", function() {
+            expect(sqrt(-1)).toBe("sqrt can't work on negative number")
+        });
+
+        - Show running unit tests in various browsers
