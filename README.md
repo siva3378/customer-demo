@@ -10,41 +10,47 @@ In this sample project you can find
 - fully configured karma configuration which runs tests on various browsers & generates various reports
 - you can also integrate with build environment like jenkins-build integration
 
-Developer tools required
+Install following softwares
 ---------------------------------
 Following software needs to be installed for UI development with this project  
 
 - Node.js & npm (Node package manager)
 - Git
 
-Install following Node package
+Install following Node packages
 -------------------------------------------------
 Once Node & npm is installed in your machine, you can install all node packages with node console.
 
 1. Open "Node.js command prompt"
 2. Change directory to the project root folder where you can find "package.json" file
-3. Execute following commands in "Node.js command prompt" to install node packages
+3. Install global node modules
 
-        npm install -g bower gulp jasmine-core karma karma-cli karma-jasmine phantomjs
-        
-        npm install -g karma-chrome-launcher  karma-phantomjs-launcher karma-firefox-launcher karma-ie-launcher
-        
-        npm install -g karma-coverage karma-html-reporter
+        npm install -g bower gulp jasmine-core karma karma-cli karma-jasmine phantomjs karma-chrome-launcher  karma-phantomjs-launcher karma-firefox-launcher karma-ie-launcher karma-coverage karma-html-reporter karma-jenkins-reporter
 
+4. Install local modules (which are specified in package.json) with following command. This one command also executes unit tests in PhantomJS browser.
+ 
         npm install
 
-To run tests in specific browser : (say Chrome)
------------------------------------------
-First you need to install the Chrome browser. Now karma runner requires an environment variable called "CHROME_BIN" (for Chrome browser). This can be set in the user account environment variables by searching with word "env" in start 
+Running javascript unit test cases
+-------------------------------------------
+- Open "Node.js command prompt"
+- Run few gulp task to generate html templates 
 
-1.	Start > search "env" > open "Edit environment variable for your account".
-2.	Click on "New" button under "User Variables for ..."
-3.	In Variable name enter : CHROME_BIN
-4.	In Variable value enter : "path to exe file of chrome browser" Eg: C:\Users\PalaSK\AppData\Local\Google\Chrome\Application\chrome.exe (if it exists here)
-5.	Restart your command prompt and enter "%CHROME_BIN%" which should open a chrome browser
-6.	If the above step doesn’t open a chrome browser, please check the path you have provided in environment variables
-7.  In karma.config.js at line no 66, add "Chrome" to the browsers array
-8.  start karma runner to run on both PhantomJS & Chrome browser
+        gulp html2js
+
+     >This gulp task converts all your html templates to javascript templates and updates into angular template cache. Whenever you change any html file, you should execute this command or you can execute a watcher command in a separate window specified in gulp tasks section
+
+- Start karma runner - following command starts karma runner, executes all the unit test cases, generates all reports and also watches for any change in our js files & executes all unit tests again
+
+        karma start karma.config.js
+
+- Run karma with few options
+
+        karma start karma.config.js --reporters html,coverage,dots // To generate perticular reports
+        karma start karma.config.js --browsers Chrome // To run only in chrome
+        karma start karma.config.js --single-run // To run only once
+
+- You need to open html report files from "tests/reports" in browser to check the generated reports
 
 Avaliable Gulp tasks - (yet to develop more tasks)
 -------------------------------
@@ -71,28 +77,22 @@ You can execute following commands to perform development tasks
         not implemented yet ;)
 
 
-Running javascript unit test cases
--------------------------------------------
-- Open "Node.js command prompt"
-- Run gulp task 
 
-        gulp html2js
+ To run tests in specific browser : (say Chrome)
+-----------------------------------------
+First you need to install the Chrome browser. Now karma runner requires an environment variable called "CHROME_BIN" (for Chrome browser). This can be set in the user account environment variables by searching with word "env" in start 
 
-     >This gulp task converts all your html templates to javascript templates and updates into angular template cache. Whenever you change any html file, you should execute this command or you can execute a watcher command in a separate window specified in gulp tasks section
+1.  Start > search "env" > open "Edit environment variable for your account".
+2.  Click on "New" button under "User Variables for ..."
+3.  In Variable name enter : CHROME_BIN
+4.  In Variable value enter : "path to exe file of chrome browser" Eg: C:\Users\PalaSK\AppData\Local\Google\Chrome\Application\chrome.exe (if it exists here)
+5.  Restart your command prompt and enter "%CHROME_BIN%" which should open a chrome browser
+6.  If the above step doesn’t open a chrome browser, please check the path you have provided in environment variables
+7.  In karma.config.js at line no 66, add "Chrome" to the browsers array
+8.  start karma runner to run on both PhantomJS & Chrome browser
+9.
 
-- Start karma runner - following command starts karma runner, executes all the unit test cases, generates all reports and also watches for any change in our js files & executes all unit tests again
 
-        karma start karma.config.js
-
-- Run karma with few options
-
-        karma start karma.config.js --reporters html,coverage,dots // To generate perticular reports
-        karma start karma.config.js --browsers Chrome // To run only in chrome
-        karma start karma.config.js --single-run // To run only once
-
-- You need to open html report files from "tests/reports" in browser to check the generated reports
-
- 
 If you use maven to build your entire java project you need to exclude node_modules from build:
 -------------------------------------------
 npm installs more than 30,000 files in "node_modules" directory. When we do maven clean & build, maven tries to put all these node modules inside *.war file, which takes more than 1 hour. So In order to exclude "node_modules" folder insert following plugin in <project directory>\web\pom.xml (inside plugins tag)

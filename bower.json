@@ -32,7 +32,8 @@
   "devDependencies": {
     "jasmine-jquery": "~2.1.0",
     "jasmine-expect": "~1.22.3",
-    "jasmine-core": "jasmine#~2.3.4"
+    "jasmine-core": "jasmine#~2.3.4",
+    "angular-mocks": "~1.4.7"
   },
   "main": "index.js",
   "resolutions": {

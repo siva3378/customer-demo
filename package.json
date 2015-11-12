@@ -4,8 +4,8 @@
   "description": "It is a sample app to demo about jasmine & karma",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm update  && npm install -g bower gulp jasmine-core karma karma-cli karma-jasmine phantomjs karma-chrome-launcher  karma-phantomjs-launcher karma-firefox-launcher karma-ie-launcher karma-coverage karma-html-reporter --save-dev",
-    "postinstall": "gulp sass && gulp html2js && gulp inject && npm test",
+    "prestart": "npm update",
+    "postinstall": "bower install && gulp sass && gulp html2js && gulp inject && npm test",
     "test": "karma start karma.config.js --single-run --browsers PhantomJS"
   },
   "author": "Siva Kumar",
@@ -39,6 +39,7 @@
     "karma-ie-launcher": "^0.2.0",
     "karma-jasmine": "^0.3.5",
     "karma-jasmine-html-reporter": "^0.1.6",
+    "karma-jenkins-reporter": "0.0.2",
     "karma-json-fixtures-preprocessor": "0.0.4",
     "karma-ng-html2js-preprocessor": "^0.1.2",
     "karma-phantomjs-launcher": "^0.1.4",

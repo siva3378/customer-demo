@@ -13,8 +13,7 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: gulpConfig.getKarmaFiles(),
         // list of files to exclude
-        exclude: [
-        ],
+        exclude: [],
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
@@ -26,14 +25,17 @@ module.exports = function (config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['html', 'progress', 'coverage',
+        reporters: ['html', 'progress', 'coverage','jenkins'
 //            'hy-html', 'hy-reporter'
         ],
         // the default configuration 
         coverageReporter: {
-            type: 'html',
-            dir: testDir+'reports/coverage'
-        },
+            reporters:[
+                {type: 'html',dir: testDir+'reports/coverage'},
+                {type:'cobertura', dir:testDir+'reports/jenkins'}
+            ]
+        }
+        ,
         htmlReporter: {
             outputDir: testDir+'reports/unit-test', // where to put the reports  
             templatePath: null, // set if you moved jasmine_template.html 
@@ -52,6 +54,10 @@ module.exports = function (config) {
             reportFolder: testDir+'reports/angularReport',
             reportTitle: 'Unit test case report'
         },
+        jenkinsReporter:{
+            outputFile:testDir+'reports/jenkins/test-result.xml'
+        },
+
         // web server port
         port: 9876,
         // enable / disable colors in the output (reporters and logs)
@@ -75,6 +81,7 @@ module.exports = function (config) {
             'karma-jasmine',
             'karma-html-reporter',
             'karma-coverage',
+            'karma-jenkins-reporter',
             'karma-chrome-launcher',
             'karma-phantomjs-launcher',
             'karma-firefox-launcher',

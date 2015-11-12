@@ -46,14 +46,10 @@
             toastr.error(message, title);
             //Console logger
             $log.error(clientLevel + message, data);
-            //Server logger
-//            ServerLogger.postError(data);
         }
         function exception(message, data, title){
             //Console logger
             $log.error(clientLevel + message, data);
-            //Server logger
-//            ServerLogger.postError(data);
         }
         function info(keys, data, title) {
             var message=getMessageFromKeys(keys);
@@ -61,8 +57,6 @@
             toastr.info(message, title);
             //Console logger
             $log.info(clientLevel + message, data);
-            //Server logger
-//            ServerLogger.postInfo(message);
         }
 
         function success(keys, data, title) {
@@ -71,8 +65,6 @@
             toastr.success(message, title);
             //Console logger
             $log.info(clientLevel + message, data);
-            //Server logger
-//            ServerLogger.postSuccess(message);
 
         }
 
@@ -82,8 +74,6 @@
             toastr.warning(message, title);
             //Console logger
             $log.warn(clientLevel + message, data);
-            //Server logger
-//            ServerLogger.postWarn(message);
         }
 
         function clearToastr() {
