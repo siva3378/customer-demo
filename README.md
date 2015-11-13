@@ -52,7 +52,7 @@ Running javascript unit test cases
 
 - You need to open html report files from "tests/reports" in browser to check the generated reports
 
-Avaliable Gulp tasks - (yet to develop more tasks)
+Avaliable Gulp tasks - (yet to develop build tasks)
 -------------------------------
 You can execute following commands to perform development tasks
 

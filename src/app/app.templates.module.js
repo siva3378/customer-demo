@@ -418,27 +418,47 @@ try {
   module = angular.module('app.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('src/app/components/navbar/navbar.html',
-    '<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">\n' +
-    '    <div class="container">\n' +
-    '        <a class="navbar-brand" href="#/">\n' +
-    '            {{vm.appName}}</a>\n' +
-    '        <ul class="nav navbar-nav">\n' +
-    '            <li ng-repeat="item in vm.menu" ng-class="{\'active\':vm.getClass(item.link)}">\n' +
-    '                <a ng-href="{{item.link}}">\n' +
-    '                     {{item.name}}\n' +
-    '                </a>\n' +
-    '            </li>\n' +
-    '        </ul>\n' +
-    '        <form class="nav navbar-nav pull-right navbar-form" role="search">\n' +
-    '            <div class="form-group has-feedback">\n' +
-    '                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term"\n' +
-    '                ng-model="$root.searchText">\n' +
-    '                <span class="glyphicon glyphicon-search form-control-feedback"></span>\n' +
+  $templateCache.put('src/app/todo/todo.html',
+    '<header class=\'row customers view\'>\n' +
+    '    <legend class="col-md-12 text-info">\n' +
+    '        <span class="col-md-3">\n' +
+    '             <i class=\'fa fa-fw fa-check fa-2x\'></i>\n' +
+    '     TODO list \n' +
+    '        </span>\n' +
+    '        <form class="form-inline  col-md-9 text-right">\n' +
+    '        <div class="form-group">\n' +
+    '                <input type="text" ng-model=\'vm.newTask.category\' class=\'form-control\' placeholder="Category Name">\n' +
+    '            </div>\n' +
+    '            <div class="form-group">\n' +
+    '                <input type="text" ng-model=\'vm.newTask.taskName\' class=\'form-control\' placeholder="Task Name">\n' +
+    '            </div>\n' +
+    '            <div class="form-group">\n' +
+    '                <input type="text" ng-model=\'vm.newTask.taskDesc\' class=\'form-control\' placeholder="Description">\n' +
+    '            </div>\n' +
+    '            <div class="form-group">\n' +
+    '                <button class="btn btn-primary" type="button" data-ng-disabled="!vm.newTask.category || !vm.newTask.taskName" ng-click="vm.addTask(vm.newTask)">Add </button>\n' +
     '            </div>\n' +
     '        </form>\n' +
+    '    </legend>\n' +
+    '</header>\n' +
+    '<br>\n' +
+    '<div class="row">\n' +
+    '    <div class="col-md-4" ng-repeat="(key, taskList) in vm.categories">\n' +
+    '        <div class="panel panel-default">\n' +
+    '            <div class="panel-heading">\n' +
+    '                {{key | titlecase}}\n' +
+    '            </div>\n' +
+    '            <div class="list-group">\n' +
+    '                <a class="list-group-item" ng-repeat="item in taskList" ng-class="{\'task-done\':item.isDone}" ng-click="item.isDone=!item.isDone">\n' +
+    '                    <h4 class="list-group-item-heading">\n' +
+    '                                {{item.task | titlecase}}\n' +
+    '                                </h4>\n' +
+    '                    <p class="list-group-item-text">{{item.desc}}</p>\n' +
+    '                </a>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
     '    </div>\n' +
-    '</nav>\n' +
+    '</div>\n' +
     '');
 }]);
 })();
@@ -464,6 +484,38 @@ module.run(['$templateCache', function($templateCache) {
     '        </div>\n' +
     '    </div>\n' +
     '</div>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('app.templates');
+} catch (e) {
+  module = angular.module('app.templates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('src/app/components/navbar/navbar.html',
+    '<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">\n' +
+    '    <div class="container">\n' +
+    '        <a class="navbar-brand" href="#/">\n' +
+    '            {{vm.appName}}</a>\n' +
+    '        <ul class="nav navbar-nav">\n' +
+    '            <li ng-repeat="item in vm.menu" ng-class="{\'active\':vm.getClass(item.link)}">\n' +
+    '                <a ng-href="{{item.link}}">\n' +
+    '                     {{item.name}}\n' +
+    '                </a>\n' +
+    '            </li>\n' +
+    '        </ul>\n' +
+    '        <form class="nav navbar-nav pull-right navbar-form" role="search">\n' +
+    '            <div class="form-group has-feedback">\n' +
+    '                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term"\n' +
+    '                ng-model="$root.searchText">\n' +
+    '                <span class="glyphicon glyphicon-search form-control-feedback"></span>\n' +
+    '            </div>\n' +
+    '        </form>\n' +
+    '    </div>\n' +
+    '</nav>\n' +
     '');
 }]);
 })();

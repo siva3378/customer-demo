@@ -23,6 +23,10 @@
         {
             name: "Products",
             link: "#/groceries"
+        },
+        {
+            name: "TODO",
+            link: "#/todo"
         }
     ]
     main.value('config', config);

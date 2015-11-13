@@ -2,6 +2,7 @@
     angular.module('app.main').controller('AppCtrl', ['$scope', 'config', 'views', AppCtrl]);
 
     function AppCtrl($scope, config, views) {
+        var vm = this;
         $scope.appName = config.appTitle;
         $scope.menu = views;
         $scope.addTask = addTask;

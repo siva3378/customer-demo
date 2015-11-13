@@ -30,6 +30,11 @@
                     controller: 'DashboardController',
                     templateUrl: 'src/app/dashboard/dashboard.html'
                 })
+                .when('/todo', {
+                    controller: 'TODOCtrl',
+                    templateUrl: 'src/app/todo/todo.html',
+                    controllerAs:'vm'
+                })
                 .otherwise({
                     redirectTo: '/dashboard'
                 });
