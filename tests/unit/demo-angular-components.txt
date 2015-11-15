@@ -1,1 +1,448 @@
-- while injecting a controller, dont pass scope, see errors
+Loading Specific Modules for Unit Tests
+When we unit test, we don't load a browser in the same way, so how can we initialise the app if we can't use the two options we just discussed? The angular.mock.module provides this mechanism to initialise Angular modules. Next we can look into how this works.
+
+-----------------------------------------------------------------------
+
+ngMock was designed to make it easier to unit test modules. 
+It also extends some of the core services to make testing asynchronous code easier.
+It publishes global methods module() and inject() to be used in our Jasmine spec tests.
+
+------------------------------------------------------------------------
+app.module.spec.js - to demo module() & inject() methods
+------------------------------------------------------------------------
+describe("The app main module - ", function(){
+	beforeEach(module('app.main'));
+	
+	describe("Dependencies", function(){
+		var deps;
+		beforeEach(function(){
+			deps = angular.module('app.main').value('app.main').requires;
+		})
+		it("should have core - module", function(){
+			expect(deps.indexOf('app.core')).toBeGreaterThan(-1);
+		})
+	})
+});
+
+- injecting & testing route configurations
+
+The mock.module and mock.injector we just saw work together as follows:
+We registered the app.main module via mock.module.
+We called the inject function, passing a function with an argument called $route or any other service
+The injector looks for an object within the loaded module(s) (app.main, in our example) for something called $route.
+It finds the $route within the app.main module, and passes an instance to our function.
+We can use this instance for our tests.
+------------------------------------------------------------------------
+    describe("Route Config", function(){
+        var appRoutes;
+
+        beforeEach(inject(function($route){
+            appRoutes = $route.routes;
+        }));
+        describe("view - customers", function(){
+            var routeLink = "/customers";
+            var controller = "CustomersController";
+            var templateUrl = 'src/app/customers/customers.html';
+
+            it("should configured customers route", function(){
+                expect(appRoutes[routeLink]).toBeDefined();
+            })
+            it("should configured customers controller", function(){
+                expect(appRoutes[routeLink].controller).toBe(controller);
+            })
+            it("should configured customers templateUrl", function(){
+                expect(appRoutes[routeLink].templateUrl).toBe(templateUrl);
+            })
+        });
+    })
+
+------------------------------------------------------------------------
+We make use of the $controller decorator from ngMock. We can get an instance of the controller by passing its name to the $controller function instance. As a side note, if you noticed the use of underscores for the $controller function argument, it's a convention in angular that allows the use of underscores for the function arguments to inject. The injector unwraps the underscores thus allowing us to use the literal $controller for the variable assignment inside the function.
+Secondly, note that we can easily provide a mock $scope argument, since it's a simple JavaScript object.
+
+
+app.controller.spec.js - to demo controller with $scope
+- show it is failing because we need to inject $scope object
+------------------------------------------------------------------------
+describe("The app main module - ", function(){
+    beforeEach(module('app.main'));
+    
+    describe("App Controller", function(){
+        var appCtrl, scope;
+        beforeEach(inject(function($controller){
+            appCtrl = $controller('AppCtrl');
+        }));
+        it("should be defined", function(){
+            expect(appCtrl).toBeDefined();
+        });
+    });
+});
+
+- show how to manually inject $scope object
+------------------------------------------------------------------------
+    beforeEach(inject(function($controller, $rootScope){
+        scope = $rootScope.$new();
+        appCtrl = $controller('AppCtrl', {
+            $scope:scope,
+            //$routeParam:{user:'new'},
+            //$routeParam:{user:'siva'}
+        });
+    }));
+
+- Add extra specs to test fully
+------------------------------------------------------------------------
+    it("app name - should not be empty", function(){
+        expect(scope.appName).not.toBe("");
+    })
+    it("app menu - should be defined", function(){
+        expect(scope.menu).toBeDefined();
+    })
+    it("app menu - should not be empty", function(){
+        expect(scope.menu.length>0).toBeTruthy();
+    })
+
+------------------------------------------------------------------------
+todo.controller.spec.js - to demo controllerAs syntax & IF-coverage
+------------------------------------------------------------------------
+describe("TODO Controller - ", function() {
+    var todoCtrl, todoService;
+    beforeEach(module('app.main'));
+
+    beforeEach(inject(function($controller, $rootScope, TodoService) {
+        todoCtrl = $controller('TODOCtrl');
+        // get service to make spyies
+        todoService = TodoService;
+    }));
+
+    it("should be defined", function() {
+        expect(todoCtrl).toBeDefined();
+    });
+
+});
+
+- add extra tests to check the todo list
+------------------------------------------------------------------------
+    it("categories - should be defined", function() {
+        expect(todoCtrl.categories).not.toBe(null);
+    })
+    
+- Show tests are failing because of ajax request
+------------------------------------------------------------------------
+    beforeEach(module('app.main', function($provide) {
+        $provide.value('TodoService', {
+                getList: function () {
+                    return {
+                        then: function (callback) {
+                            jasmine.getJSONFixtures().fixturesPath = 'base/tests/mocks';
+                            return callback({data:getJSONFixture('todo-list.json')});
+                        }
+                    };
+                }
+            })
+    }))
+
+- Add this to make more efficient way of mocking a service
+------------------------------------------------------------------------
+beforeEach(module('app.main','mock-ajax'));
+
+- Add specs to describe add a todo method
+------------------------------------------------------------------------
+describe("addTask method", function() {
+        it("should be defined", function() {
+            expect(todoCtrl.addTask).toBeDefined();
+        });
+        it("should add a task to categories list", function() {
+            var aKey = Object.keys(todoCtrl.categories)[0];
+            var bfrLen = todoCtrl.categories[aKey].length;
+            var mockInput = {
+                category: aKey,
+                taskName: "Task Name",
+                taskDesc: "Task Description"
+            };
+            todoCtrl.addTask(mockInput);
+            expect(todoCtrl.categories[aKey].length > bfrLen).toBeTruthy();
+        })
+
+    })
+
+- Add this spec to cover IF condition
+------------------------------------------------------------------------
+    it("should add a new category", function() {
+        var oldKeys = Object.keys(todoCtrl.categories);
+        var mockInput = {
+            category: "abc123",
+            taskName: "Task Name",
+            taskDesc: "Task Description"
+        };
+        todoCtrl.addTask(mockInput);
+        var newKeys = Object.keys(todoCtrl.categories);
+        expect(oldKeys.length < newKeys.length).toBeTruthy();
+    })
+
+- Add this spec to have a spy on service call
+------------------------------------------------------------------------
+    it("should call todoService to get todo list", function() {
+        spyOn(todoService, 'getList').and.callThrough();
+        todoCtrl.loadCategories();
+        expect(todoService.getList).toHaveBeenCalled();
+    })
+
+------------------------------------------------------------------------
+customer.service.spec.js - to demo a service which do not use any ajax requests
+------------------------------------------------------------------------
+describe("The Customer Service - ", function() {
+    beforeEach(module('app.main'));
+
+    var custService;
+    beforeEach(inject(function(customersService) {
+        custService = customersService;
+    }));
+    it("should be defined", function() {
+        expect(custService).toBeDefined();
+    });
+    
+    it("should retrive customers", function(){
+        expect(custService.getCustomers()).toBeDefined();
+    });
+
+    it("should calculate total orders of a customer", function(){
+        var aCust = custService.getCustomers()[0];
+        expect(custService.calculateTotalOrders(aCust)>0).toBeTruthy();
+    })
+
+});
+
+------------------------------------------------------------------------
+todo.service.spec.js - to demo a service which uses $http to load data
+------------------------------------------------------------------------
+describe("TODO Service - ", function() {
+    beforeEach(module('app.main'));
+    var todoService, httpBackend, data;
+    beforeEach(inject(function(TodoService, _$httpBackend_) {
+        // inject the service to test
+        todoService = TodoService;
+        
+        // inject angular-mock's $httpBackend service
+        // to emulate a monitor for ajax requests & its response data
+        httpBackend = _$httpBackend_;
+        
+        //set the JSON path, from where to load the mock data
+        jasmine.getJSONFixtures().fixturesPath = 'base/tests/mocks';
+    }));
+    afterEach(function() {
+        // make sure all requests where handled as expected.
+        httpBackend.verifyNoOutstandingRequest();
+        httpBackend.verifyNoOutstandingExpectation();
+    });
+
+    it("should be defined", function() {
+        expect(todoService).toBeDefined();
+    });
+});
+
+
+- Add a spec which makes an ajax call & show it is failing because of GET request
+------------------------------------------------------------------------
+
+    it('should return todoList when calling getList', function() {
+       
+        todoService.getList().then(function(result) {
+            data = result.data;
+        });
+
+        var aKey = Object.keys(data)[0];
+        expect(data[aKey][0].task).toBe(mockData[aKey][0].task);
+    });
+
+- Add $httpBackend request handler
+------------------------------------------------------------------------
+    
+    var mockData = getJSONFixture("todo-list.json");
+    var data = null;
+    // add $httpBackend request handler
+    // & set the what should be return when there is a GET request
+    httpBackend.expectGET("data/todo-list.json").respond(mockData);
+    
+    todoService.getList().then(function(result) {
+        data = result.data;
+    });
+    
+    httpBackend.flush();
+
+
+------------------------------------------------------------------------
+navbar.directive.spec.js - testing a directive with templateURL
+- show what happens without app.template
+------------------------------------------------------------------------
+
+describe("The navbar directive - ", function() {
+    var scope, ctrl, elm, directive = "<app-navbar></app-navbar>";
+
+    beforeEach(module('app.main'));
+});
+
+- inject $compile service to compile directive
+------------------------------------------------------------------------
+    
+    beforeEach(inject(function($compile, $rootScope) {
+        scope = $rootScope.$new();
+        elm = angular.element(directive);
+        $compile(elm)(scope);
+        scope.$digest();
+        ctrl = elm.controller('app-navbar');
+    }));
+
+    describe("Controller", function() {
+        it("should be defined", function() {
+            expect(ctrl).toBeDefined();
+        });
+    });
+
+- generate templates with gulp2html task & add app.templates
+------------------------------------------------------------------------
+    beforeEach(module('app.main','app.templates'));
+
+
+    it("app name - should be defined", function() {
+        expect(ctrl.appName).toBeDefined();
+    })
+    it("app name - should not be empty", function() {
+        expect(ctrl.appName).not.toBe("");
+    })
+    it("app menu - should be defined", function() {
+        expect(ctrl.menu).toBeDefined();
+    })
+    it("app menu - should not be empty", function() {
+        expect(ctrl.menu.length > 0).toBeTruthy();
+    })
+
+------------------------------------------------------------------------
+footer.directive.spec.js - testing a directive's HTML elements
+- with jasmine-jquery
+------------------------------------------------------------------------
+
+describe("The footer directive - ", function() {
+    var scope, ctrl, elm, iScope,
+    authorObj={name:'sample-name',email:"sample-email"};
+
+    beforeEach(module('app.templates','app.main'));
+
+    beforeEach(inject(function($rootScope,$compile) {
+        scope = $rootScope.$new();
+        scope.authorObj = authorObj;
+        elm = angular.element('<app-footer author="authorObj"></app-footer>');
+        elm = $compile(elm)(scope);
+        scope.$digest();
+    }));
+});
+
+- add these specs to test html elements with jasmine-jquery
+------------------------------------------------------------------------
+    it("should render author name in footer", function(){
+        expect($(elm).find('#auth-name').text()).toBe(authorObj.name);
+    })
+    it("should render author email in footer", function(){
+        expect($(elm).find('#auth-email').text()).toBe(authorObj.email);
+    })
+
+------------------------------------------------------------------------
+customers.controller.spec.js - testing a broadcast handler
+------------------------------------------------------------------------
+
+describe("The Customer Controller - ", function() {
+    beforeEach(module('app.main'));
+
+    var scope, uibModal, ctrl, root;
+    beforeEach(inject(function($controller, $uibModal, $rootScope) {
+        scope = $rootScope.$new();
+        root = $rootScope;
+        uibModal = $uibModal;
+        ctrl = $controller('CustomersController', {
+            $scope: scope,
+            $uibModal: uibModal
+        })
+        scope.$digest();
+    }));
+    it("should be defined", function() {
+        expect(ctrl).toBeDefined();
+    });
+
+    it("should open a pop-up when calls for take an order", function() {
+        spyOn(uibModal, 'open');
+        scope.takeOrderInPopup(scope.customers[0]);
+        expect(uibModal.open).toHaveBeenCalled();
+    })
+});
+
+- Add broadcast handler spec
+------------------------------------------------------------------------
+    it("should handle broadcasts", function() {
+        expect(scope.orderInfo).toBe(null);
+
+        var obj = {
+            count: 5,
+            name: "Customer name"
+        };
+        var eventName = "EVENT.ORDER_PLACED";
+        scope.$apply(function() {
+            root.$broadcast(eventName, obj);
+        })
+        expect(scope.orderInfo).toBe(obj);
+    });
+
+------------------------------------------------------------------------
+take-order-modal.controller.spec.js - testing a 3rd party instance objects with jasmine.createSpy
+------------------------------------------------------------------------
+
+describe("The TakeOrderModal Controller - ", function() {
+    beforeEach(module('app.main'));
+
+    var scope, modalInstance, ctrl, root, service;
+    
+    beforeEach(inject(function($controller, $rootScope, customersService) {
+        scope = $rootScope.$new();
+        root = $rootScope;
+        service = customersService;
+       
+        ctrl = $controller('TakeOrderModalCtrl', {
+            $scope: scope,
+            $rootScope : root,
+           
+            customer:service.getCustomers()[0]
+        })
+        scope.$digest();
+    }));
+    it("should be defined", function() {
+        expect(ctrl).toBeDefined();
+    });
+
+    
+});
+
+- create modalInstance object
+------------------------------------------------------------------------
+    modalInstance = {
+        close: jasmine.createSpy('modalInstance.close'),
+        dismiss: jasmine.createSpy('modalInstance.dismiss'),
+        result: {
+            then: jasmine.createSpy('modalInstance.result.then')
+        }
+    };
+
+- supply modalInstance object
+------------------------------------------------------------------------
+    $uibModalInstance:modalInstance,
+ 
+- add specs to check both modalInstance & broadcast handlers
+------------------------------------------------------------------------
+    it("should call modal close when 'Done' button is pressed", function(){
+        scope.ok();
+        expect(modalInstance.close).toHaveBeenCalled();
+    })
+
+     it("should emit broadcast event @ root", function() {
+        spyOn(root, "$broadcast").and.callThrough();
+        var eventName = "EVENT.ORDER_PLACED";
+        scope.ok();
+        expect(root.$broadcast).toHaveBeenCalled();
+    })

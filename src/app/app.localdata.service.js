@@ -19,7 +19,7 @@ angular
             var custList = getCustomerNames();
             var groceryList = getGroceryList();
 
-            var MAX_CUSTOMERS = 50;
+            var MAX_CUSTOMERS = 25;
             var ORDER_LIMIT = 2;
             var ITEMS_LIMIT = 4;
             var customers = [];

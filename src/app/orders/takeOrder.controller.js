@@ -20,6 +20,8 @@ function TakeOrdersController($scope, $routeParams, customersService,$localStora
         var customerID = ($routeParams.customerID) ? parseInt($routeParams.customerID) : 0;
         if (customerID > 0) {
             $scope.customer = customersService.getCustomer(customerID);
+        }else{
+            $scope.customer =$scope.$parent.customer
         }
 
         $scope.itemList = groceryService.getAllInArray();
@@ -28,12 +30,13 @@ function TakeOrdersController($scope, $routeParams, customersService,$localStora
     $scope.addItem = function(newItem) {
         $scope.order.itemList.push(newItem);
         $scope.newItem = resetItem();
-        logger.info("Added an item to your list");
+        // logger.info("Added an item to your list");
     }
     $scope.addOrder = function() {
         $scope.order.id = $localStorage.orderCounter++;
         customersService.addOrder($scope.customer, $scope.order);
         $scope.order = resetOrder();
+        $scope.$parent.orderCount++;
         logger.success("Order Placed Successfully");
     }
     

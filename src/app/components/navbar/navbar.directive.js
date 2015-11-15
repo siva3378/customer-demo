@@ -12,7 +12,8 @@
         };
         return directive;
         /** @ngInject */
-        function NavbarController(moment, views, config,$location) {
+        function NavbarController(moment, views, config, $location) {
+            
             var vm = this;
             vm.menu = views;
             vm.appName = config.appTitle;

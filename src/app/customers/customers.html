@@ -19,10 +19,17 @@
     </legend>
 </header>
 <br />
-<br />
+<div class="row" ng-if="showOrderInfo">
+    <div class="col-md-12">
+        <p class="alert alert-info">
+            {{orderInfo.count}} orders placed for {{orderInfo.name}}
+        </p>
+    </div>    
+</div>
+
 <div>
     <div class="row">
-        <div class="col-md-3" data-ng-repeat="customer in customers | orderBy:'firstName' | filter:searchText">
+        <div class="col-md-3" data-ng-repeat="customer in customers track by $index | orderBy:'firstName' | filter:searchText">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {{customer.firstName + ' ' + customer.lastName | titlecase}}
@@ -34,8 +41,9 @@
                         {{getTotalAmount(customer)| number:2}}
                     </span>
                     <br>
-                    <a href="#/takeorder/{{customer.id}}" class="cardBody btn-link">
-                    Take an Order</a> | 
+                    <a class="cardBody btn-link" ng-click="takeOrderInPopup(customer)">Take an Order</a> |
+                    <!-- <a href="#/takeorder/{{customer.id}}" class="cardBody btn-link">
+                    </a> |  -->
                     <a href="#/customerorders/{{customer.id}}" class="cardBody btn-link">
                     View {{ customer.orders.length }} Orders</a>
                 </div>

@@ -1,0 +1,11 @@
+{
+    "sample": [{
+        "task": "Sample task",
+        "desc": "not completed",
+        "isDone": false
+    }, {
+        "task": "Sample task",
+        "desc": "completed",
+        "isDone": true
+    }]
+}

@@ -1,47 +1,29 @@
-describe("The app main module - ", function(){
-	beforeEach(module('app.main'));
-	
-	describe("App Controller", function(){
-		var appCtrl, scope;
-		beforeEach(inject(function($controller, $rootScope){
-			scope = $rootScope.$new();
+describe("The app main module - ", function() {
+    beforeEach(module('app.main'));
 
-			// appCtrl = $controller('AppCtrl');
+    describe("App Controller", function() {
+        var appCtrl, scope;
 
-			appCtrl = $controller('AppCtrl', {
-				$scope:scope
-			});
-		}));
-		it("should be defined", function(){
-			expect(appCtrl).toBeDefined();
-		});
+        beforeEach(inject(function($controller, $rootScope) {
+            scope = $rootScope.$new();
+            appCtrl = $controller('AppCtrl', {
+                $scope: scope,
+                //$routeParam:{user:'new'},
+                //$routeParam:{user:'siva'}
+            });
+        }));
 
-		it("categories - should be defined", function(){
-			expect(scope.categories).toBeDefined();
-		})
-		it("categories - should be defined", function(){
-			expect(scope.categories).toBeDefined();
-		})
-		describe("addTask method", function(){
-			it("should be defined", function(){
-				expect(scope.addTask).toBeDefined();
-			});
-			it("should add a task to categories-work list", function(){
-				var aKey = Object.keys(scope.categories)[0];
-				var bfrLen = scope.categories[aKey].length;
-				var mockInput = [aKey, "Task Name", "Task Description"];
-				scope.addTask(mockInput);
-				expect(scope.categories[aKey].length>bfrLen).toBeTruthy();
-			})
-
-			it("should add a new category", function(){
-				var oldKeys = Object.keys(scope.categories);
-				var mockInput = ["abc123", "Task Name", "Task Description"];
-				scope.addTask(mockInput);
-				var newKeys = Object.keys(scope.categories);
-				expect(oldKeys.length<newKeys.length).toBeTruthy();
-			})
-		})
-	});
-
+        it("should be defined", function() {
+            expect(appCtrl).toBeDefined();
+        });
+        it("app name - should not be empty", function() {
+            expect(scope.appName).not.toBe("");
+        })
+        it("app menu - should be defined", function() {
+            expect(scope.menu).toBeDefined();
+        })
+        it("app menu - should not be empty", function() {
+            expect(scope.menu.length > 0).toBeTruthy();
+        })
+    });
 });

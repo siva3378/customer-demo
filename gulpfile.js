@@ -35,7 +35,7 @@ gulp.task('sass', ['clean-styles'], function() {
 
 // Watch for any change in SASS files
 gulp.task('sass-watcher', function() {
-    gulp.watch([config.appStyles.allThemes], ['sass']);
+    gulp.watch([config.appStyles.allThemes,config.appStyles.allScss], ['sass']);
 });
 
 /************************************************************************
@@ -75,6 +75,11 @@ gulp.task('inject', ['wiredep', 'sass'], function() {
         }))
         .pipe(gulp.dest(config.indexPath));
 });
+gulp.task('gen-index',['inject'],function(){
+    return gulp
+            .src(config.indexPath + config.indexPage)
+            .pipe(gulp.dest("../resources/webapps/"));
+})
 gulp.task('wiredep-spec', function() {
     log('Wire up the bower css and js into the html');
     var options = config.getWiredepDefaultOptions();

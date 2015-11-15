@@ -4,13 +4,14 @@ angular
     .module('app.main')
     .controller('DashboardController', DashboardController);
 
-function DashboardController($scope, $routeParams, stateWiseService, customersService, logger, STORAGE_KEY,groceryService,productWiseService) {
+function DashboardController($scope, $routeParams, stateWiseService, customersService, logger, STORAGE_KEY, groceryService, productWiseService, $timeout) {
 
-    $scope.stateWiseOrders = stateWiseService.getOrders();
-    $scope.stateWiseCustomers = stateWiseService.getCustomers();
-    $scope.productWise = productWiseService.get();
-    
-    $scope.totalOrders = customersService.calculateAllOrders();
-    $scope.totalCustomers = customersService.getCustomers().length;
-    $scope.totalGroceryItems = groceryService.getAllInArray().length;
+        $scope.stateWiseOrders = stateWiseService.getOrders();
+        $scope.stateWiseCustomers = stateWiseService.getCustomers();
+        $scope.productWise = productWiseService.get();
+
+        $scope.totalOrders = customersService.calculateAllOrders();
+        $scope.totalCustomers = customersService.getCustomers().length;
+        $scope.totalGroceryItems = groceryService.getAllInArray().length;
+
 }

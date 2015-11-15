@@ -3,8 +3,17 @@
         <div class="container">
             <footer>
                 <div class="row">
-                    <div class="col-md-12 navbar-text">
-                        Created by Siva Kumar @ skumar244@sapient.com
+                    <div class="col-md-6">
+                        <span class='navbar-text'>
+                            Created by <span id='auth-name'>{{author.name}}</span> @ <span id='auth-email'>{{author.email}}</span>
+                        </span>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button type="button" 
+                            class="btn btn-default navbar-btn" 
+                            ng-click='like()'>
+                            <i class="fa fa-fw fa-thumbs-o-up"></i>{{likeCount}}
+                        </button>
                     </div>
                 </div>
             </footer>

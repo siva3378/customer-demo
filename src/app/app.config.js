@@ -6,6 +6,10 @@
     var config = {
         appTitle: 'Customers Management App',
         copyRightText: 'Copy Right Text will be here',
+        author:{
+            name:'Siva Kumar',
+            email:'skumar244@sapient.com'
+        }
     };
     var views = [
     {

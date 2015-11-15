@@ -27,10 +27,17 @@ module.run(['$templateCache', function($templateCache) {
     '    </legend>\n' +
     '</header>\n' +
     '<br />\n' +
-    '<br />\n' +
+    '<div class="row" ng-if="showOrderInfo">\n' +
+    '    <div class="col-md-12">\n' +
+    '        <p class="alert alert-info">\n' +
+    '            {{orderInfo.count}} orders placed for {{orderInfo.name}}\n' +
+    '        </p>\n' +
+    '    </div>    \n' +
+    '</div>\n' +
+    '\n' +
     '<div>\n' +
     '    <div class="row">\n' +
-    '        <div class="col-md-3" data-ng-repeat="customer in customers | orderBy:\'firstName\' | filter:searchText">\n' +
+    '        <div class="col-md-3" data-ng-repeat="customer in customers track by $index | orderBy:\'firstName\' | filter:searchText">\n' +
     '            <div class="panel panel-default">\n' +
     '                <div class="panel-heading">\n' +
     '                    {{customer.firstName + \' \' + customer.lastName | titlecase}}\n' +
@@ -42,8 +49,9 @@ module.run(['$templateCache', function($templateCache) {
     '                        {{getTotalAmount(customer)| number:2}}\n' +
     '                    </span>\n' +
     '                    <br>\n' +
-    '                    <a href="#/takeorder/{{customer.id}}" class="cardBody btn-link">\n' +
-    '                    Take an Order</a> | \n' +
+    '                    <a class="cardBody btn-link" ng-click="takeOrderInPopup(customer)">Take an Order</a> |\n' +
+    '                    <!-- <a href="#/takeorder/{{customer.id}}" class="cardBody btn-link">\n' +
+    '                    </a> |  -->\n' +
     '                    <a href="#/customerorders/{{customer.id}}" class="cardBody btn-link">\n' +
     '                    View {{ customer.orders.length }} Orders</a>\n' +
     '                </div>\n' +
@@ -55,6 +63,27 @@ module.run(['$templateCache', function($templateCache) {
     '<br /><br />\n' +
     '<br /><br />\n' +
     '<br />');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('app.templates');
+} catch (e) {
+  module = angular.module('app.templates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('src/app/customers/take-order-modal.html',
+    '<!-- <div class="modal-header">\n' +
+    '    <h3 class="modal-title">Place an Order</h3>\n' +
+    '</div> -->\n' +
+    '<div class="modal-body" ng-controller=\'TakeOrdersController\'>\n' +
+    '    <div ng-include="\'src/app/orders/takeOrder.html\'"></div>\n' +
+    '</div>\n' +
+    '<div class="modal-footer">\n' +
+    '    <button class="btn btn-primary" type="button" ng-click="ok()">Done</button>\n' +
+    '</div>\n' +
+    '');
 }]);
 })();
 
@@ -452,6 +481,7 @@ module.run(['$templateCache', function($templateCache) {
     '                <a class="list-group-item" ng-repeat="item in taskList" ng-class="{\'task-done\':item.isDone}" ng-click="item.isDone=!item.isDone">\n' +
     '                    <h4 class="list-group-item-heading">\n' +
     '                                {{item.task | titlecase}}\n' +
+    '                                    <i class=\'fa fa-fw pull-right\' ng-class="{\'fa-check\':item.isDone}"></i>\n' +
     '                                </h4>\n' +
     '                    <p class="list-group-item-text">{{item.desc}}</p>\n' +
     '                </a>\n' +
@@ -476,8 +506,17 @@ module.run(['$templateCache', function($templateCache) {
     '        <div class="container">\n' +
     '            <footer>\n' +
     '                <div class="row">\n' +
-    '                    <div class="col-md-12 navbar-text">\n' +
-    '                        Created by Siva Kumar @ skumar244@sapient.com\n' +
+    '                    <div class="col-md-6">\n' +
+    '                        <span class=\'navbar-text\'>\n' +
+    '                            Created by <span id=\'auth-name\'>{{author.name}}</span> @ <span id=\'auth-email\'>{{author.email}}</span>\n' +
+    '                        </span>\n' +
+    '                    </div>\n' +
+    '                    <div class="col-md-6 text-right">\n' +
+    '                        <button type="button" \n' +
+    '                            class="btn btn-default navbar-btn" \n' +
+    '                            ng-click=\'like()\'>\n' +
+    '                            <i class="fa fa-fw fa-thumbs-o-up"></i>{{likeCount}}\n' +
+    '                        </button>\n' +
     '                    </div>\n' +
     '                </div>\n' +
     '            </footer>\n' +

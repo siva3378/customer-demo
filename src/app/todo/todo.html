@@ -31,6 +31,7 @@
                 <a class="list-group-item" ng-repeat="item in taskList" ng-class="{'task-done':item.isDone}" ng-click="item.isDone=!item.isDone">
                     <h4 class="list-group-item-heading">
                                 {{item.task | titlecase}}
+                                    <i class='fa fa-fw pull-right' ng-class="{'fa-check':item.isDone}"></i>
                                 </h4>
                     <p class="list-group-item-text">{{item.desc}}</p>
                 </a>

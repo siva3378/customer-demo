@@ -18,6 +18,7 @@ module.exports = function() {
         appStyles: {
             // all themes to compile & generate it's css files
             allThemes: styles + '*.sass',
+            allScss:styles+'**/*.scss',
             // all css files to be removed before sass compilation
             allCss: styles + 'css-themes/*.css',
             //generate css themes here
