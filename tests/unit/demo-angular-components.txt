@@ -1,4 +1,4 @@
-Loading Specific Modules for Unit Tests
+
 When we unit test, we don't load a browser in the same way, so how can we initialise the app if we can't use the two options we just discussed? The angular.mock.module provides this mechanism to initialise Angular modules. Next we can look into how this works.
 
 -----------------------------------------------------------------------
@@ -23,14 +23,7 @@ describe("The app main module - ", function(){
 		})
 	})
 });
-
 - injecting & testing route configurations
-
-The mock.module and mock.injector we just saw work together as follows:
-We registered the app.main module via mock.module.
-We called the inject function, passing a function with an argument called $route or any other service
-The injector looks for an object within the loaded module(s) (app.main, in our example) for something called $route.
-It finds the $route within the app.main module, and passes an instance to our function.
 We can use this instance for our tests.
 ------------------------------------------------------------------------
     describe("Route Config", function(){
@@ -56,11 +49,14 @@ We can use this instance for our tests.
         });
     })
 
+- We registered the app.main module via mock.module.
+
+- We called the inject function, passing a function with an argument called $route or any other service
+
+- The injector looks for an object within the loaded module(s) (app.main, in our example) for something called $route.
+
+- It finds the $route within the app.main module, and passes an instance to our function.
 ------------------------------------------------------------------------
-We make use of the $controller decorator from ngMock. We can get an instance of the controller by passing its name to the $controller function instance. As a side note, if you noticed the use of underscores for the $controller function argument, it's a convention in angular that allows the use of underscores for the function arguments to inject. The injector unwraps the underscores thus allowing us to use the literal $controller for the variable assignment inside the function.
-Secondly, note that we can easily provide a mock $scope argument, since it's a simple JavaScript object.
-
-
 app.controller.spec.js - to demo controller with $scope
 - show it is failing because we need to inject $scope object
 ------------------------------------------------------------------------
@@ -77,6 +73,10 @@ describe("The app main module - ", function(){
         });
     });
 });
+
+- injecting a controller is little bit different than injecting any service. 
+- Here first we need to get $controller decorator from ngMock, 
+- then we can get the instance of a controller by passing its name
 
 - show how to manually inject $scope object
 ------------------------------------------------------------------------
@@ -108,10 +108,8 @@ describe("TODO Controller - ", function() {
     var todoCtrl, todoService;
     beforeEach(module('app.main'));
 
-    beforeEach(inject(function($controller, $rootScope, TodoService) {
+    beforeEach(inject(function($controller, $rootScope) {
         todoCtrl = $controller('TODOCtrl');
-        // get service to make spyies
-        todoService = TodoService;
     }));
 
     it("should be defined", function() {
@@ -143,7 +141,7 @@ describe("TODO Controller - ", function() {
 
 - Add this to make more efficient way of mocking a service
 ------------------------------------------------------------------------
-beforeEach(module('app.main','mock-ajax'));
+beforeEach(module('app.main','mock-services'));
 
 - Add specs to describe add a todo method
 ------------------------------------------------------------------------
@@ -162,22 +160,19 @@ describe("addTask method", function() {
             todoCtrl.addTask(mockInput);
             expect(todoCtrl.categories[aKey].length > bfrLen).toBeTruthy();
         })
-
+        it("should add a new category", function() {
+            var oldKeys = Object.keys(todoCtrl.categories);
+            var mockInput = {
+                category: "abc123",
+                taskName: "Task Name",
+                taskDesc: "Task Description"
+            };
+            todoCtrl.addTask(mockInput);
+            var newKeys = Object.keys(todoCtrl.categories);
+            expect(oldKeys.length < newKeys.length).toBeTruthy();
+        })
     })
 
-- Add this spec to cover IF condition
-------------------------------------------------------------------------
-    it("should add a new category", function() {
-        var oldKeys = Object.keys(todoCtrl.categories);
-        var mockInput = {
-            category: "abc123",
-            taskName: "Task Name",
-            taskDesc: "Task Description"
-        };
-        todoCtrl.addTask(mockInput);
-        var newKeys = Object.keys(todoCtrl.categories);
-        expect(oldKeys.length < newKeys.length).toBeTruthy();
-    })
 
 - Add this spec to have a spy on service call
 ------------------------------------------------------------------------
@@ -215,6 +210,17 @@ describe("The Customer Service - ", function() {
 ------------------------------------------------------------------------
 todo.service.spec.js - to demo a service which uses $http to load data
 ------------------------------------------------------------------------
+
+describe("TODO Service - ", function() {
+    beforeEach(module('app.main'));
+    var todoService, httpBackend, data;
+    
+    beforeEach(inject(function(TodoService, _$httpBackend_) {
+
+    }));
+});
+
+
 describe("TODO Service - ", function() {
     beforeEach(module('app.main'));
     var todoService, httpBackend, data;
@@ -346,6 +352,35 @@ describe("The footer directive - ", function() {
     })
 
 ------------------------------------------------------------------------
+titlecase.filter.spec.js - testing a filter
+------------------------------------------------------------------------
+describe("The titlecase filter ", function(){
+    beforeEach(module('app.main'));
+    var titlecaseFilter;
+    beforeEach(inject(function($filter){
+        titlecaseFilter = $filter("titlecase");
+    }));
+});
+
+
+- Add extra unit tests
+------------------------------------------------------------------------
+it("should convert string to titlecase", function(){
+        var testString = "hello test";
+        var expected = "Hello Test";
+        expect(titlecaseFilter(testString)).toBe(expected);
+    })
+    it("should not convert empty string", function(){
+        var testString = "";
+        var expected = "";
+        expect(titlecaseFilter(testString)).toBe(expected);
+    })
+    it("should handel null objects", function(){
+        var testString = null;
+        var expected = "";
+        expect(titlecaseFilter(testString)).toBe(expected);
+    })
+------------------------------------------------------------------------
 customers.controller.spec.js - testing a broadcast handler
 ------------------------------------------------------------------------
 
@@ -446,3 +481,5 @@ describe("The TakeOrderModal Controller - ", function() {
         scope.ok();
         expect(root.$broadcast).toHaveBeenCalled();
     })
+
+

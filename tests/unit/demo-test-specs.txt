@@ -1,38 +1,82 @@
+        Slide 2:
+        ---------
+        In this presentation, we will look at a 
+        - short intro to Unit testing
+        - then breif discription of setup Jasmine & karma
+        - And mostly I focus on testing Angular components. 
+
+        - In coming tech week learning, where we get 2 hrs of time, In that I will explain more about jasmine & karma.
+        ------------------------------------------------------------------------
+        Slide 3:
+        ---------
+        In the Traditional way of Development, 
+        we always develop code -> refresh the browser & check the results in browser. 
+        and F5 becomes our fav button in the keyboard
+
+        we actually Test the system as a whole single unit where Individual components are rarely tested
+        In this, if we have a very bigger modules and whole lot of dependency, sometimes errors may go undetected.
+        There would not be any Isolation of errors, it would be difficult to track down
+
+         today I'm going to introduce a TTD approach
+        ------------------------------------------------------------------------
+        Slide 4:
+        ---------
+        In the TDD approach, 
+        we first start with writing tests(either unit or e2e) & see your tests are failing
+        then we just Write enough code to make our test pass
+        and with the support of test suit, we can do refactor of code to be more elegant, understandable, and maintainable.
+        ------------------------------------------------------------------------
+        Slide 5: 
+        ---------
+        In TDD, basically we have two types.
+        1. Unit testing in which individual components/methods/functions are tested
+        2. e2e testing, which runs on our browser. In this we test whole system which has integration of all individual components
+
+        Today I will show you how to UNIT TEST our JavaScript
+
+        ------------------------------------------------------------------------
+        Slide 6: About Jasmine
+        ---------       
+        Jasmine is a testing framework for JavaScript. It does not rely on browsers, DOM, or any JavaScript framework. Thats why it is suited to test websites, Node.js projects, or anywhere that JavaScript can run.
+
+        1st you can download jasmine files from github & create a SpecRunner.html file in wich you should include
+            - All JS lib files on which our source code is depend on
+            - Jasmine files
+            - All JS source files
+            - All Spec files (we havn't yet create any spec file, we can see it in next slide)
+        
+        Lets see a sample spec
+
+        ------------------------------------------------------------------------
+        Slide 7: Writing Unit tests
+        ---------  
+        As you can see, this way of describing how you expect your code to respond is quite readable. 
+        It is also easy to write.
+        This way of writing tests in a human readable format is a form of Behavior Driven Development. 
+        In order to emphasize the fact that the tests should be written before the functional code, they are typically referred to as “specs”
+
+        ------------------------------------------------------------------------
         - Show SpecRunner.html file
         - Show the empty app.js & app.spec.js files to start
         - To demonstrate TTD approach, 
 
         - Add initial specs
         ------------------------------------------------------------------------
-        describe("The APP's - ", function() {
-            describe('parse boolean function', function() {
-                var fun;
-                beforeEach(function() {
-                    // here you can inject any functions or initialize some data
-                    fun = parseBool;
-                });
-                
-                it("should parse 'true' string to boolean value", function() {
-                    var bool = {val: "true"};
-                    expect(fun(bool)).toBe(true);
-                });
-            });
+describe("The APP's - ", function() {
 
-            describe('sqrt function', function() {
-                it("should compute the square root of 4 as 2", function() {
-                    expect(sqrt(4)).toEqual(2);
-                });
-            });
-        })
+    describe('sqrt function', function() {
+        it("should compute the square root of 4 as 2", function() {
+            expect(sqrt(4)).toEqual(2);
+        });
+    });
+
+})
+
 
         - Show SpecRunner.html file with tests fails
 
         - add these functions to see tests are passed
         ------------------------------------------------------------------------
-        function parseBool(flag) {
-            return (flag.val === "true") ? true : false;
-        }
-
         function sqrt(x) {
             if (x < 0) {
                 return "sqrt can't work on negative number"
@@ -40,47 +84,17 @@
                 return Math.exp(Math.log(x) / 2);
             }
         }
+        
 
 
-        - update test according to req, and check unit test report
-        - We can see few tests are failing, so we need to refractor our code
         ------------------------------------------------------------------------
-        it("should parse 'TRUE' string to boolean value", function() {
-            var bool = {val: "TRUE"};
-            expect(fun(bool)).toBe(true);
-        });
-
-         it("should parse null to boolean value - false", function() {
-             var bool = null;
-             expect(fun(bool)).toBe(false);
-         });
-         it("should parse undefined to boolean value - false", function() {
-             var bool = undefined;
-             expect(fun(bool)).toBe(false);
-         });
-         it("should parse empty string to boolean value - false", function() {
-             var bool = "";
-             expect(fun(bool)).toBe(false);
-         });
-
-         do code refactor - to make all tests are passed
-        ------------------------------------------------------------------------
-        function parseBool(flag) {
-            if (flag) {
-                return (flag.val === "true" || flag.val === "TRUE") ? true : false;
-            } else {
-                return false;
-            }
-        }
-
+        Slide 15: Writing Unit tests
+        ---------          
         - Environment setup of karma
 
         - for coverage report
         - add extra tests to cover fully
         ------------------------------------------------------------------------
-         it("should parse 'false' string to boolean value", function() {
-             expect(fun({val:"false"})).toBe(false);
-         });
 
         it("should throw an exception if given a negative number", function() {
             expect(sqrt(-1)).toBe("sqrt can't work on negative number")
